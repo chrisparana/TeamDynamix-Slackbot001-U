@@ -1,0 +1,82 @@
+{
+  "name": "chrisparana/TeamDynamix-Slackbot001-U",
+  "version": "0.1.4",
+  "libraries": {
+    "xv": "^1.1.25"
+  },
+  "title": "TeamDynamix Slackbot 001",
+  "branch": "",
+  "style": {
+    "name": "Swiss",
+    "componentSet": {
+      "nav": "nav/BasicNav",
+      "header": "header/SwissHeader",
+      "article": "article/SwissArticle",
+      "footer": "footer/BasicFooter"
+    },
+    "fontFamily": "\"Helvetica Neue\", Helvetica, Arial, sans-serif",
+    "heading": {
+      "fontWeight": 700,
+      "letterSpacing": "-0.01em"
+    },
+    "layout": {
+      "fluid": true
+    },
+    "colors": {
+      "text": "#000",
+      "background": "#fff",
+      "primary": "#05a",
+      "secondary": "#444",
+      "highlight": "#f30",
+      "border": "#ccc",
+      "muted": "#eee"
+    }
+  },
+  "content": [
+    {
+      "component": "nav",
+      "links": [
+        {
+          "href": "https://github.com/chrisparana/TeamDynamix-Slackbot001-U",
+          "text": "GitHub"
+        }
+      ]
+    },
+    {
+      "component": "header",
+      "heading": "TeamDynamix-Slackbot001-U",
+      "children": [
+        {
+          "component": "ui/TweetButton",
+          "text": "TeamDynamix-Slackbot001-U: ",
+          "url": null
+        },
+        {
+          "component": "ui/GithubButton",
+          "user": "chrisparana",
+          "repo": "TeamDynamix-Slackbot001-U"
+        }
+      ]
+    },
+    {
+      "component": "article",
+      "metadata": {
+        "source": "github.readme"
+      },
+      "html": "<h1>TeamDynamix Slackbot001-U Installation and Setup</h1>\n<h2>Setup Slack</h2>\n<ol>\n<li>Create new app in slack<ul>\n<li>Note your <code>Verification Token</code></li>\n</ul>\n</li>\n<li>Create new Slash Command<ul>\n<li>Command: <code>/td</code></li>\n<li>In the <strong>Request URL field</strong>, enter <code>https://yourbotservername.com/api/slack</code></li>\n<li>In the <strong>Short Description field</strong>, enter <code>Gets a TeamDynamix Ticket</code></li>\n<li>In the <strong>Usage Hint field</strong>, enter <code>name or ticket number</code></li>\n</ul>\n</li>\n<li>Create new Interactive Components<ul>\n<li>In the <strong>Request URL field</strong>, enter <code>https://yourbotservername.com/api/slackbuttons</code></li>\n</ul>\n</li>\n</ol>\n<h2>Setup App Server</h2>\n<p><em>Important!</em> Make sure <a href=\"https://getcomposer.org\">Composer</a> is installed and the server meets Laravel&apos;s <a href=\"https://laravel.com/docs/5.5/installation#server-requirements\">requirements</a>.</p>\n<p>Clone the repo into your web directory (for example, <code>/var/www</code>).</p>\n<p><code>git clone git://github.com/chrisparana/TeamDynamix-Slackbot001-U</code></p>\n<p>Most folders should be normal <code>755</code> and files, <code>644</code>.\nThe only folder front facing should be everything in <code>/public</code></p>\n<p>The app requires some folders to be writable for the web server user:</p>\n<pre>sudo chgrp -R www-data storage bootstrap/<span class=\"hljs-keyword\">cache</span>\nsudo chmod -R ug+rwx <span class=\"hljs-keyword\">storage</span> bootstrap/<span class=\"hljs-keyword\">cache</span></pre><p>Point your web server to the public directory (for example, <code>/var/www/TeamDynamix-Slackbot001-U/public</code>)</p>\n<p><strong>Setting the application key</strong></p>\n<p>Switch to the app&apos;s root directory and run <code>php artisan key:generate</code> from the command line.</p>\n<p><strong>Set up a database</strong></p>\n<p>Create a MySQL database. Make sure it supports <code>utf8mb4</code>. When running the migration, if you receive an <code>SQLSTATE[42000]: Syntax error or access violation: 1071 Specified key was too long; max key length is 767 bytes</code> error, uncomment the <code>Schema::defaultStringLength(191);</code> line in <code>/app/Providers/AppServiceProvider.php</code>.</p>\n<p><strong>Set up .env</strong></p>\n<p>Using vi or your favorite text editor, create an <code>.env</code> file from the <code>.env.example</code> file.</p>\n<ol>\n<li><p>Enter in appropriate settings for database</p>\n<pre><span class=\"hljs-attr\">DB_CONNECTION</span>=mysql\n<span class=\"hljs-attr\">DB_HOST</span>=localhost\n<span class=\"hljs-attr\">DB_PORT</span>=<span class=\"hljs-number\">3306</span>\n<span class=\"hljs-attr\">DB_DATABASE</span>=YOUR_DB_NAME\n<span class=\"hljs-attr\">DB_USERNAME</span>=YOUR_DB_USERNAME\n<span class=\"hljs-attr\">DB_PASSWORD</span>=YOUR_DB_PASSWORD</pre></li>\n<li><p>Enter in settings for Slack using the <code>Verification Token</code> you noted in step 1.</p>\n<p> <code>SLACK_SLASH_COMMAND_VERIFICATION_TOKEN=YOUR_SLACK_TOKEN</code></p>\n</li>\n<li><p>Enter in settings for TeamDynamix</p>\n<pre><span class=\"hljs-attr\">TD_BEID</span>=YOUR_BEID\n<span class=\"hljs-attr\">TD_WEBSERVICESKEY</span>=YOUR_WEBSERVICE_KEY\n<span class=\"hljs-attr\">TD_URLROOT</span>=YOUR_TD_URL\n<span class=\"hljs-attr\">TD_SANDBOX</span>=<span class=\"hljs-literal\">FALSE</span>\n<span class=\"hljs-attr\">TD_APPID</span>=YOUR_TD_APPID</pre></li>\n</ol>\n<p><strong>Run Migration</strong></p>\n<p>Switch to the app&apos;s root directory and run <code>php artisan migrate</code>.</p>\n<p>Check to make sure everything is working so far by visiting your web server&apos;s address.</p>\n<p><img src=\"https://raw.githubusercontent.com/chrisparana/TeamDynamix-Slackbot001-U/master/docs/img/webview.png\"></p>\n<h2>Choose and Setup your worker queue driver</h2>\n<p><a href=\"http://supervisord.org\">Supervisor</a> along with the app&apos;s worker queue database is recommended for a quick setup, but you may use Amazon SQS, Beanstalkd, or Redis.</p>\n<p>Set which queue driver you will be using in the <code>.env</code>. For our Supervisor setup, we will be using <code>QUEUE_DRIVER=database</code>.</p>\n<p><strong>Set up for Supervisor</strong></p>\n<p>Install Supervisor with <code>sudo apt-get install supervisor</code></p>\n<p>Use vi or your favorite editor to create <code>/etc/supervisor/conf.d/slackbot-tdticketcmd-worker.conf</code></p>\n<p>Here is a working example configuration for the worker queue. You may need to change this depending on your server&#x2019;s set up.</p>\n<pre>[<span class=\"hljs-string\">program:</span> slackbot-tdticketcmd-worker]\nprocess_name=%(program_name)s_%(process_num)<span class=\"hljs-number\">02</span>d\ncommand=php <span class=\"hljs-regexp\">/var/</span>www<span class=\"hljs-regexp\">/TeamDynamix-Slackbot001-U/</span>\nartisan <span class=\"hljs-string\">queue:</span>work --sleep=<span class=\"hljs-number\">3</span> --tries=<span class=\"hljs-number\">3</span>\nautostart=<span class=\"hljs-literal\">true</span>\nautorestart=<span class=\"hljs-literal\">true</span>\nnumprocs=<span class=\"hljs-number\">8</span>\nredirect_stderr=<span class=\"hljs-literal\">true</span>\nstdout_logfile=<span class=\"hljs-regexp\">/var/</span>www<span class=\"hljs-regexp\">/TeamDynamix-Slackbot001-U/</span>storage<span class=\"hljs-regexp\">/logs/</span>worker.log</pre><p><strong>Start the supervisor worker processes</strong></p>\n<pre>sudo supervisorctl reread\nsudo supervisorctl <span class=\"hljs-keyword\">update</span>\nsudo supervisorctl <span class=\"hljs-keyword\">start</span> <span class=\"hljs-keyword\">all</span></pre><p>That&apos;s it. You should be all set to use your TeamDynamix Slackbot. From Slack, enter <code>/td help</code> for more information.</p>\n"
+    },
+    {
+      "component": "footer",
+      "links": [
+        {
+          "href": "https://github.com/chrisparana/TeamDynamix-Slackbot001-U",
+          "text": "GitHub"
+        },
+        {
+          "href": "https://github.com/chrisparana",
+          "text": "chrisparana"
+        }
+      ]
+    }
+  ]
+}

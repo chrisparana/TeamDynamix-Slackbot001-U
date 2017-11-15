@@ -145,12 +145,12 @@ The Jobs table keeps track of jobs dispatched by `app/SlashCommandHandlers/ShowT
 
 The TD/Bot Session table stores the data for the user session model, which includes:
 
-User's Slack ID
-User's current Slack token
-User's current TeamDynamix JWT
-Number of searches user performed
-Number of tickets user requested
-Number times the user pressed the show ticket button
+- User's Slack ID
+- User's current Slack token
+- User's current TeamDynamix JWT
+- Number of searches user performed
+- Number of tickets user requested
+- Number times the user pressed the show ticket button
 
 ## Other information
 

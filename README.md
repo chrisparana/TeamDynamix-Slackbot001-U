@@ -11,7 +11,7 @@
 	- In the **Usage Hint field**, enter `name or ticket number`
 3. Create new Interactive Components
 	- In the **Request URL field**, enter `https://yourbotservername.com/api/slackbuttons`
-  
+
 ## Setup App Server
 
 *Important!* Make sure composer is installed and server meets Laravel [requirements](https://laravel.com/docs/5.5/installation#server-requirements). Make sure [Composer](https://getcomposer.org) is installed.
@@ -26,7 +26,7 @@ The only folder front facing should be everything in `/public`
 The app requires some folders to be writable for the web server user:
 
 ```
-sudo chgrp -R www-data storage bootstrap/cache 
+sudo chgrp -R www-data storage bootstrap/cache
 sudo chmod -R ug+rwx storage bootstrap/cache
 ```
 
@@ -74,6 +74,8 @@ Use vi or your favorite editor, create an `.env` file from the `.env.example` fi
 Switch to the app's root directory and run `php artisan migrate`.
 
 Check to make sure everything is working so far by visiting your web server's address.
+
+![working installation](https://github.com/chrisparana/TeamDynamix-Slackbot001-U/master/docs/img/webview.png)
 
 ## Choose and Setup your worker queue driver
 

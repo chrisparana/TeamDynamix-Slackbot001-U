@@ -102,19 +102,6 @@ class SearchTDTicketJob extends SlashCommandResponseJob
           unset($attachmentFields);
         }
 
-        /*
-          Created new function in /spatie/laravel-slack-slash-command/src/Response.php
-          Waiting on pull request review merge to master
-          public function withAttachments(array $attachments)
-          {
-              foreach ($attachments as $attachment) {
-                  $this->attachments->push($attachment);
-              }
-
-              return $this;
-          }
-        */
-
         if ($opencount > 0) {
           $this
              ->respondToSlack("🕵️ I found " . $opencount . " open tickets.")

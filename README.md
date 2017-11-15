@@ -1,5 +1,6 @@
 # TeamDynamix Slackbot001-U Installation and Setup
 
+
 ## Setup Slack
 
 1. Create new app in slack
@@ -11,6 +12,7 @@
 	- In the **Usage Hint field**, enter `name or ticket number`
 3. Create new Interactive Components
 	- In the **Request URL field**, enter `https://yourbotservername.com/api/slackbuttons`
+
 
 ## Setup App Server
 
@@ -32,13 +34,16 @@ sudo chmod -R ug+rwx storage bootstrap/cache
 
 Point your web server to the public directory (for example, `/var/www/TeamDynamix-Slackbot001-U/public`)
 
+
 **Setting the application key**
 
 Switch to the app's root directory and run `php artisan key:generate` from the command line.
 
+
 **Set up a database**
 
 Create a MySQL database. Make sure it supports `utf8mb4`. When running the migration, and you receive an `SQLSTATE[42000]: Syntax error or access violation: 1071 Specified key was too long; max key length is 767 bytes` error, uncomment the `Schema::defaultStringLength(191);` line in `/app/Providers/AppServiceProvider.php`.
+
 
 **Set up .env**
 
@@ -69,17 +74,19 @@ Use vi or your favorite editor, create an `.env` file from the `.env.example` fi
   TD_APPID=YOUR_TD_APPID
   ```
 
+
 **Run Migration**
 
 Switch to the app's root directory and run `php artisan migrate`.
 
 Check to make sure everything is working so far by visiting your web server's address.
 
-![working installation](https://github.com/chrisparana/TeamDynamix-Slackbot001-U/master/docs/img/webview.png)
+![working installation](https://raw.githubusercontent.com/chrisparana/TeamDynamix-Slackbot001-U/master/docs/img/webview.png)
 
 ## Choose and Setup your worker queue driver
 
 [Supervisor](http://supervisord.org) along with the app's worker queue database is recommended for a quick setup, but you may use Amazon SQS, Beanstalkd, or Redis.
+
 
 **Set up for Supervisor**
 
@@ -100,6 +107,7 @@ numprocs=8
 redirect_stderr=true
 stdout_logfile=/var/www/TeamDynamix-Slackbot001-U/storage/logs/worker.log
 ```
+
 
 **Start the supervisor worker processes**
 

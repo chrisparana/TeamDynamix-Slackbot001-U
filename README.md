@@ -1,5 +1,6 @@
 # TeamDynamix Slackbot001-U Installation and Setup
 
+*Note! This is the basic universal version. Full point release will contain the web interface to build fully customized commands and responses.*
 
 ## Setup Slack
 

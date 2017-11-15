@@ -87,6 +87,7 @@ Check to make sure everything is working so far by visiting your web server's ad
 
 [Supervisor](http://supervisord.org) along with the app's worker queue database is recommended for a quick setup, but you may use Amazon SQS, Beanstalkd, or Redis.
 
+Set which queue driver you will be using in the `.env`. For our Supervisor setup, we will be using `QUEUE_DRIVER=database`.
 
 **Set up for Supervisor**
 

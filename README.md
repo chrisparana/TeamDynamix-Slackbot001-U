@@ -16,7 +16,7 @@
 
 ## Setup App Server
 
-*Important!* Make sure composer is installed and server meets Laravel [requirements](https://laravel.com/docs/5.5/installation#server-requirements). Make sure [Composer](https://getcomposer.org) is installed.
+*Important!* Make sure [Composer](https://getcomposer.org) is installed and the server meets Laravel's [requirements](https://laravel.com/docs/5.5/installation#server-requirements).
 
 Clone the repo into your web directory (for example, `/var/www`).
 
@@ -42,12 +42,12 @@ Switch to the app's root directory and run `php artisan key:generate` from the c
 
 **Set up a database**
 
-Create a MySQL database. Make sure it supports `utf8mb4`. When running the migration, and you receive an `SQLSTATE[42000]: Syntax error or access violation: 1071 Specified key was too long; max key length is 767 bytes` error, uncomment the `Schema::defaultStringLength(191);` line in `/app/Providers/AppServiceProvider.php`.
+Create a MySQL database. Make sure it supports `utf8mb4`. When running the migration, if you receive an `SQLSTATE[42000]: Syntax error or access violation: 1071 Specified key was too long; max key length is 767 bytes` error, uncomment the `Schema::defaultStringLength(191);` line in `/app/Providers/AppServiceProvider.php`.
 
 
 **Set up .env**
 
-Use vi or your favorite editor, create an `.env` file from the `.env.example` file.
+Using vi or your favorite text editor, create an `.env` file from the `.env.example` file.
 
 1. Enter in appropriate settings for database
 

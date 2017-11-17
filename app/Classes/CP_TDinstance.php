@@ -199,8 +199,8 @@ class CP_TDinstance extends CP_TDauth {
     $ticketids = array((int)$search);
     $data = array("TicketIDs" => $ticketids);
     $data_string = json_encode($data);
-    $people = $this->connect('post', 'assets/search', $data_string);
-    return $people;
+    $assets = $this->connect('post', 'assets/search', $data_string);
+    return $assets;
   }
 
   public function searchResponsibility($search) {

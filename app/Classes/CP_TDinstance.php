@@ -24,6 +24,7 @@ class CP_TDauth {
 
     private function __construct0() {
       Log::info('CP_TDauth: Constructing empty self.');
+      $this->auth = 'FALSE';
     }
 
     private function __construct5($b, $w, $u, $i, $e) {

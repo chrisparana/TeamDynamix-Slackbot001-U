@@ -18,7 +18,7 @@ class CP_TDinstsanceTest extends TestCase
     public function testInstance()
     {
         $CPTD = new CP_TDinstance();
-        if ($CPTD = 'FALSE') {
+        if ($CPTD == 'FALSE') {
             $this->assertTrue(true);
         }
         else {

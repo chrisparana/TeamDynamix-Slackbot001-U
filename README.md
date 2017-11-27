@@ -1,4 +1,6 @@
 # TeamDynamix Slackbot001-U Installation and Setup
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
+[![Build Status](https://img.shields.io/travis/chrisparana/TeamDynamix-Slackbot001-U.svg?branch=master)](https://api.travis-ci.org/chrisparana/TeamDynamix-Slackbot001-U.svg?branch=master)
 
 *Note! This is the basic universal version. Full point release will contain the web interface to build fully customized commands and responses.*
 

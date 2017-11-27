@@ -4,7 +4,6 @@ namespace Slackbot001;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class TDsession extends Model
 {
     use Traits\Encryptable;

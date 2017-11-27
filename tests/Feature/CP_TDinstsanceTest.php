@@ -2,11 +2,8 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Slackbot001\Classes\CP_TDinstance;
+use Tests\TestCase;
 
 class CP_TDinstsanceTest extends TestCase
 {
@@ -20,8 +17,7 @@ class CP_TDinstsanceTest extends TestCase
         $CPTD = new CP_TDinstance();
         if ($CPTD == 'FALSE') {
             $this->assertTrue(true);
-        }
-        else {
+        } else {
             $this->assertTrue(false);
         }
     }

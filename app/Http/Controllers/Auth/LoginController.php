@@ -2,8 +2,8 @@
 
 namespace Slackbot001\Http\Controllers\Auth;
 
-use Slackbot001\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Slackbot001\Http\Controllers\Controller;
 
 class LoginController extends Controller
 {

@@ -58,4 +58,27 @@ class SessionManager
     }
     return $TDinstance;
   }
+
+  public function checkSession($slackUID)
+  {
+      Log::info('CP_SessionManager: checkSession method called.');
+      $userSession = TDsession::where('s_user_id', $slackUID)->first();
+      if ($userSession != NULL) {
+        Log::info('CP_SessionManager: Session exists.');
+        return true;
+      } else {
+        Log::info('CP_SessionManager: Session does not exist.');
+        return false;
+      }
+  }
+  public function deleteSession($slackUID)
+  {
+      Log::info('CP_SessionManager: deleteSession method called.');
+      if($this->checkSession($slackUID)){
+        $userSession = TDsession::where('s_user_id', $slackUID)->first();
+        $sid = $userSession->id;
+        $userSession->delete();
+        Log::info('CP_SessionManager: Deleted session ' . $sid . '.');
+      }
+  }
 }

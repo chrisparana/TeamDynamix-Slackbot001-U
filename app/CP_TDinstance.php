@@ -14,6 +14,8 @@ class CP_TDauth
     protected $appsroot = '';
     protected $appid = '';
     protected $authstring = '';
+    protected $authsig = '';
+    protected $header = '';
 
     public function __construct()
     {
@@ -27,13 +29,11 @@ class CP_TDauth
     private function __construct0()
     {
         Log::info('CP_TDauth: Constructing empty self.');
-        $this->auth = 'FALSE';
     }
 
     private function __construct5($b, $w, $u, $i, $e)
     {
         Log::info('CP_TDauth: Constructing self with new authorization.');
-
         $this->setEnv($e, $u);
         $this->authorize($b, $w, $this->urlroot);
         $this->BEID = $b;
@@ -44,16 +44,23 @@ class CP_TDauth
     private function __construct6($b, $w, $u, $i, $e, $a)
     {
         Log::info('CP_TDauth: Constructing self with existing authorization.');
-
         $this->setEnv($e, $u);
         $this->BEID = $b;
         $this->WebServicesKey = $w;
         $this->appid = $i;
 
-        list($JWTheader, $JWTpayload, $JWTsig) = explode('.', $a);
-        $this->auth = $a;
-        $this->expires = json_decode(base64_decode($JWTpayload))->exp;
-        $this->authstring = 'Authorization: Bearer '.$this->auth;
+        $parts = explode('.', $a);
+        if(count($parts) == 3) {
+            list($JWTheader, , $JWTsig) = $parts;
+            $this->auth = $a;
+            $this->expires = json_decode(base64_decode($JWTpayload))->exp;
+            $this->authstring = 'Authorization: Bearer '.$this->auth;
+            $this->header = $JWTheader;
+            $this->authsig = $JWTpayload;
+        }
+        else {
+            Log::info('CP_TDauth: Invalid token.');
+        }
     }
 
     private function setEnv($e, $u)

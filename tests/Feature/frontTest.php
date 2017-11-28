@@ -7,11 +7,11 @@ use Tests\TestCase;
 class frontTest extends TestCase
 {
     /**
-     * A basic test example.
+     * Tests SessionManager.
      *
      * @return void
      */
-    public function testBasicTest()
+    public function testSession()
     {
         $response = $this->get('/');
 

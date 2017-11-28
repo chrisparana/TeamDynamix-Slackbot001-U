@@ -2,9 +2,8 @@
 
 namespace Slackbot001\SlashCommandHandlers\Jobs;
 
-use Log;
-use Slackbot001\Classes\CP_TDinstance;
-use Slackbot001\TDsession;
+use Illuminate\Support\Facades\Log;
+use Slackbot001\SessionManager;
 use Spatie\SlashCommand\Attachment;
 use Spatie\SlashCommand\AttachmentField;
 use Spatie\SlashCommand\Jobs\SlashCommandResponseJob;
@@ -16,40 +15,8 @@ class ShowTDTicketJob extends SlashCommandResponseJob
     {
         $build = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
 
-        if (env('TD_SANDBOX') == 'TRUE') {
-            $env = 'sandbox';
-        } else {
-            $env = 'prod';
-        }
-
-        $userSession = TDsession::where('s_user_id', $this->request->userId)->first();
-        if ($userSession != null) {
-            Log::info('CP_ShowTDTicketJob: Found user session.');
-            if ($userSession->td_token) {
-                $TDinstance = new CP_TDinstance(env('TD_BEID'), env('TD_WEBSERVICESKEY'), env('TD_URLROOT'), env('TD_APPID'), $env, (string) $userSession->td_token);
-                Log::info('CP_ShowTDTicketJob: CP_TDinstance initialized with existing JWT.');
-            } else {
-                $TDinstance = new CP_TDinstance(env('TD_BEID'), env('TD_WEBSERVICESKEY'), env('TD_URLROOT'), env('TD_APPID'), $env);
-                Log::info('CP_ShowTDTicketJob: CP_TDinstance initialized with new JWT.');
-            }
-
-            Log::info('CP_ShowTDTicketJob: Updating existing CP_TDsession s_token and td_token.');
-            $userSession->s_token = $this->request->token;
-            $userSession->td_token = $TDinstance;
-            $userSession->save();
-        } else {
-            Log::info('CP_ShowTDTicketJob: No user session.');
-            Log::info('CP_ShowTDTicketJob: Creating new user session.');
-            $TDinstance = new CP_TDinstance(env('TD_BEID'), env('TD_WEBSERVICESKEY'), env('TD_URLROOT'), env('TD_APPID'), $env);
-            Log::info('CP_ShowTDTicketJob: New CP_TDinstance initialized.');
-            $userSession = new TDsession();
-            Log::info('CP_ShowTDTicketJob: New CP_TDsession initialized.');
-            Log::info('CP_ShowTDTicketJob: Updating CP_TDsession s_token and td_token.');
-            $userSession->s_user_id = $this->request->userId;
-            $userSession->s_token = $this->request->token;
-            $userSession->td_token = $TDinstance;
-            $userSession->save();
-        }
+        $userSession = new SessionManager();
+        $TDinstance = $userSession->setupSession($this->request->userId, $this->request->token);
 
         if ($TDinstance->checkToken()) {
             Log::info('CP_ShowTDTicketJob: There is a token.');
@@ -66,7 +33,7 @@ class ShowTDTicketJob extends SlashCommandResponseJob
             $ticketURL = (string) $TDinstance->rootAppsUrl().'Tickets/TicketDet?TicketID='.$ticket['ID'];
             $assets = $TDinstance->searchAssets($ticket['ID']);
             $assetnames = 'No Assets';
-            $userSession->increment('td_tickets');
+            $userSession()->increment('td_tickets');
 
             if (count($assets)) {
                 $assetnames = '';

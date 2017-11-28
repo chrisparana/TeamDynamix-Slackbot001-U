@@ -3,8 +3,8 @@
 namespace Slackbot001\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Log;
-use Slackbot001\TDsession;
+use Illuminate\Support\Facades\Log;
+use Slackbot001\SessionManager;
 
 class SlackButtonController extends Controller
 {
@@ -37,22 +37,9 @@ class SlackButtonController extends Controller
         $result = curl_exec($ch);
         curl_close($ch);
 
-        $userSession = TDsession::where('s_user_id', $data->user->id)->first();
-        if ($userSession != null) {
-            Log::info('CP_SlackButtonController: Found user session.');
-            $userSession->increment('s_showtickets');
-        } else {
-            Log::info('CP_SlackButtonController: No user session.');
-            Log::info('CP_SlackButtonController: Creating new user session.');
-            $userSession = new TDsession();
-            Log::info('CP_SlackButtonController: New CP_TDsession initialized.');
-            Log::info('CP_SlackButtonController: Updating CP_TDsession s_user_id and s_token.');
-            $userSession->s_user_id = $data->user->id;
-            $userSession->s_token = $data->token;
-            $userSession->save();
-
-            $userSession->increment('s_showtickets');
-        }
+        $userSession = new SessionManager();
+        $TDinstance = $userSession->setupSession($data->user->id, $data->token);
+        $userSession()->increment('s_showtickets');
 
         Log::info('CP_SlackButtonController: Creating instance of SlashCommand Request and CP_ShowTDTicket.');
 

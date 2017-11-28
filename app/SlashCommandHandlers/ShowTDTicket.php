@@ -2,7 +2,7 @@
 
 namespace Slackbot001\SlashCommandHandlers;
 
-use Log;
+use Illuminate\Support\Facades\Log;
 use Slackbot001\SlashCommandHandlers\Jobs\SearchTDTicketJob;
 use Slackbot001\SlashCommandHandlers\Jobs\ShowTDTicketJob;
 use Spatie\SlashCommand\Handlers\BaseHandler;

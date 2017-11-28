@@ -1,8 +1,8 @@
 <?php
 
-namespace Slackbot001\Classes;
+namespace Slackbot001;
 
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class CP_TDauth
 {

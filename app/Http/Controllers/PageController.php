@@ -3,8 +3,8 @@
 namespace Slackbot001\Http\Controllers;
 
 use DB;
-use Log;
-use Slackbot001\Classes\CP_TDinstance;
+use Illuminate\Support\Facades\Log;
+use Slackbot001\CP_TDinstance;
 
 class PageController extends Controller
 {

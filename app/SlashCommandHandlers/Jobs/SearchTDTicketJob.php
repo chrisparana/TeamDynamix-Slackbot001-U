@@ -2,7 +2,7 @@
 
 namespace Slackbot001\SlashCommandHandlers\Jobs;
 
-use Log;
+use Illuminate\Support\Facades\Log;
 
 use Slackbot001\SessionManager;
 use Spatie\SlashCommand\Attachment;
@@ -17,14 +17,14 @@ class SearchTDTicketJob extends SlashCommandResponseJob
     {
         $build = \Tremby\LaravelGitVersion\GitVersionHelper::getVersion();
 
-        $userSession = SessionManager::where('s_user_id', $this->request->userId)->first();
-        $TDinstance = $userSession->setupSession($this->request->token, $this->request->userId);
+        $userSession = new SessionManager();
+        $TDinstance = $userSession->setupSession($this->request->userId, $this->request->token);
 
         if ($TDinstance->checkToken()) {
             Log::info('CP_SearchTDTicketJob: There is a token.');
             $auth = true;
             $tickets = $TDinstance->searchTicketsName($this->request->text);
-            $userSession->increment('td_searches');
+            $userSession()->increment('td_searches');
         } else {
             Log::info('CP_SearchTDTicketJob: No token.');
             $auth = false;

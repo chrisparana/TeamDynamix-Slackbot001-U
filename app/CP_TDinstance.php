@@ -51,16 +51,15 @@ class CP_TDauth
 
         $parts = explode('.', $a);
         if(count($parts) == 3) {
-            list($JWTheader, , $JWTsig) = $parts;
+            list($JWTheader, $JWTpayload, $JWTsig) = $parts;
             $this->auth = $a;
             $this->expires = json_decode(base64_decode($JWTpayload))->exp;
             $this->authstring = 'Authorization: Bearer '.$this->auth;
             $this->header = $JWTheader;
-            $this->authsig = $JWTpayload;
+            $this->authsig = $JWTsig;
+            return;
         }
-        else {
             Log::info('CP_TDauth: Invalid token.');
-        }
     }
 
     private function setEnv($e, $u)

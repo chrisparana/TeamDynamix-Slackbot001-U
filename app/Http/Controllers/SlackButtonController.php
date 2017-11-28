@@ -38,7 +38,7 @@ class SlackButtonController extends Controller
         curl_close($ch);
 
         $userSession = new SessionManager();
-        $TDinstance = $userSession->setupSession($data->user->id, $data->token);
+        $userSession->setupSession($data->user->id, $data->token);
         $userSession()->increment('s_showtickets');
 
         Log::info('CP_SlackButtonController: Creating instance of SlashCommand Request and CP_ShowTDTicket.');

@@ -19,10 +19,10 @@ class CP_TDauth
 
     public function __construct()
     {
-        $a = func_get_args();
-        $i = func_num_args();
-        if (method_exists($this, $f = '__construct'.$i)) {
-            call_user_func_array([$this, $f], $a);
+        $args = func_get_args();
+        $argcount = func_num_args();
+        if (method_exists($this, $func = '__construct'.$argcount)) {
+            call_user_func_array([$this, $func], $args);
         }
     }
 
@@ -31,35 +31,41 @@ class CP_TDauth
         Log::info('CP_TDauth: Constructing empty self.');
     }
 
-    public function __construct5($beid, $wskey, $urlroot, $id, $env)
+    public function __construct5($beid, $wskey, $urlroot, $appid, $env)
     {
         Log::info('CP_TDauth: Constructing self with new authorization.');
         $this->setEnv($env, $urlroot);
         $this->authorize($beid, $wskey, $this->urlroot);
         $this->BEID = $beid;
         $this->WebServicesKey = $wskey;
-        $this->appid = $id;
+        $this->appid = $appid;
     }
 
-    public function __construct6($beid, $wskey, $urlroot, $id, $env, $a)
+    public function __construct6($beid, $wskey, $urlroot, $appid, $env, $auth)
     {
         Log::info('CP_TDauth: Constructing self with existing authorization.');
         $this->setEnv($env, $urlroot);
         $this->BEID = $beid;
         $this->WebServicesKey = $wskey;
-        $this->appid = $id;
+        $this->appid = $appid;
 
-        $parts = explode('.', $a);
+<<<<<<< HEAD
+        $parts = explode('.', $auth);
         if(count($parts) == 3) {
+=======
+        $parts = explode('.', $a);
+        if (count($parts) == 3) {
+>>>>>>> e693102ad88ad9336e40ad505fb7aa39f5c980e5
             list($JWTheader, $JWTpayload, $JWTsig) = $parts;
-            $this->auth = $a;
+            $this->auth = $auth;
             $this->expires = json_decode(base64_decode($JWTpayload))->exp;
             $this->authstring = 'Authorization: Bearer '.$this->auth;
             $this->header = $JWTheader;
             $this->authsig = $JWTsig;
+
             return;
         }
-            Log::info('CP_TDauth: Invalid token.');
+        Log::info('CP_TDauth: Invalid token.');
     }
 
     private function setEnv($env, $urlroot)

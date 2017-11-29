@@ -3,7 +3,6 @@
 namespace Slackbot001\SlashCommandHandlers\Jobs;
 
 use Illuminate\Support\Facades\Log;
-
 use Slackbot001\SessionManager;
 use Spatie\SlashCommand\Attachment;
 use Spatie\SlashCommand\AttachmentAction;

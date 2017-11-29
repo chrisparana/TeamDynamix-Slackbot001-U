@@ -50,7 +50,7 @@ class CP_TDauth
         $this->appid = $appid;
 
         $parts = explode('.', $auth);
-        if(count($parts) == 3) {
+        if (count($parts) == 3) {
             list($JWTheader, $JWTpayload, $JWTsig) = $parts;
             $this->auth = $auth;
             $this->expires = json_decode(base64_decode($JWTpayload))->exp;

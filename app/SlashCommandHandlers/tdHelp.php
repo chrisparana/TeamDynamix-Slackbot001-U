@@ -13,7 +13,7 @@ class tdHelp extends SignatureHandler
 
     public function handle(Request $request): Response
     {
-        $command = $this->getArgument('command');
+        //$command = $this->getArgument('command');
 
         return $this->respondToSlack('*TeamDynamix Slackbot Help*')
             ->withAttachment(

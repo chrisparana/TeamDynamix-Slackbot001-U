@@ -1,8 +1,9 @@
 # TeamDynamix Slackbot001-U Installation and Setup
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
-[![Build Status](https://img.shields.io/travis/chrisparana/TeamDynamix-Slackbot001-U.svg?style=flat-square)](https://travis-ci.org/chrisparana/TeamDynamix-Slackbot001-U)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE.txt)
+[![Build Status](https://img.shields.io/travis/chrisparana/TeamDynamix-Slackbot001-U.svg?style=flat)](https://travis-ci.org/chrisparana/TeamDynamix-Slackbot001-U)
 [![StyleCI](https://styleci.io/repos/110712386/shield?branch=master)](https://styleci.io/repos/110712386)
-[![Codacy branch grade](https://img.shields.io/codacy/grade/d4ab6a4335e7435c9e116102108b9eca/master.svg?style=flat-square)](https://www.codacy.com/app/chrisparana/TeamDynamix-Slackbot001-U?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chrisparana/TeamDynamix-Slackbot001-U&amp;utm_campaign=Badge_Grade)
+[![Codacy branch grade](https://img.shields.io/codacy/grade/d4ab6a4335e7435c9e116102108b9eca/master.svg?style=flat)](https://www.codacy.com/app/chrisparana/TeamDynamix-Slackbot001-U?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chrisparana/TeamDynamix-Slackbot001-U&amp;utm_campaign=Badge_Grade)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chrisparana/TeamDynamix-Slackbot001-U/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chrisparana/TeamDynamix-Slackbot001-U/?branch=master)
 
 *Note! This is the basic universal version. Full point release will contain the web interface to build fully customized commands and responses.*
 
@@ -65,7 +66,7 @@ Using vi or your favorite text editor, create an `.env` file from the `.env.exam
   DB_PASSWORD=YOUR_DB_PASSWORD
   ```
 
-2. Enter in settings for Slack using the `Verification Token` you noted in step 1.
+2. Enter in settings for Slack using the `Verification Token` you noted in **Setup Slack** step 1.
 
 	`SLACK_SLASH_COMMAND_VERIFICATION_TOKEN=YOUR_SLACK_TOKEN`
 
@@ -127,19 +128,21 @@ That's it. You should be all set to use your TeamDynamix Slackbot. From Slack, e
 
 # Technical Details
 
-All of the communications to TeamDynamix is handled by `app/Classes/CP_TDinstance.php`. This provides the mechanisms to create the authorization objects and keep tokens per user, as well as automatically update the tokens once they expire. Additionally, finding information about a ticket is handled here.
+All of the communications to TeamDynamix is handled by `app/CP_TDinstance.php`. This provides the mechanisms to create the authorization objects and keep tokens per user, as well as automatically update the tokens once they expire. Additionally, finding information about a ticket is handled here.
 
 `app/Traits/Encryptable.php` is a trait responsible for encrypting objects with the application's key. In this case, see the TDsession model (`app/TDsession.php`).
+
+`app/SessionManager` is responsible for setting up, checking, updating, and deleting sessions by coordinating with the TDsession model and CP_TDinstance. It first checks if we are in the sandbox or production instance of your TeamDynamix application, determined in your `.env` file. Next it checks if the current Slack user has made a request before or not, and handles the creation or update of the user session appropriately. This information is stored encrypted inside the TDsession model stored in the bot's database.
 
 Slack requires an immediate response from the bot once a command is sent. This is handled by `app/SlashCommandHandlers/ShowTDTicket.php`. ShowTDTicket determines if the request can be handled, what kind of request it is, then dispatches a job to handle the request, and responds "One moment please…" back to slack. There are two job processes from which ShowTDTicket chooses from, detailed below.
 
 **SearchTDTicketJob**
 
-SearchTDTicketJob (`app/SlashCommandHandlers/Jobs/SearchTDTicketJob.php`) is responsible for searching for a ticket by either the Requestor or Responsible person's name. It first checks if it is to be searching the sandbox or production instance of your TeamDynamix application, determined in your `.env` file. Next it checks if the current Slack user has made a request before or not, and handles the creation or update of the user session appropriately. This information is stored encrypted inside the TDsession model stored in the bot's database. Next SearchTDTicketJob collects the matching tickets using the TDinstance object (`app/Classes/CP_TDinstance.php`), then generates and returns the Slack attachments to Slack. Note that Slack can only handle up to 100 attachments, so searching is limited to 100 open tickets associated with the searched name.
+SearchTDTicketJob (`app/SlashCommandHandlers/Jobs/SearchTDTicketJob.php`) is responsible for searching for a ticket by either the Requestor or Responsible person's name. First it gets the session data from SessionManager. Next, the job collects the matching tickets using the TDinstance object (`app/CP_TDinstance.php`), then generates and returns the Slack attachments to Slack. Note that Slack can only handle up to 100 attachments, so searching is limited to 100 open tickets associated with the searched name.
 
 **ShowTDTicketJob**
 
-ShowTDTicketJob (`app/SlashCommandHandlers/Jobs/ShowTDTicketJob.php`) is responsible for displaying any given ticket. It is invoked by the ShowTDTicket method and accepts a TeamDynamix ticket number. Either entering a ticket number, or pressing the "Show Ticket" buttons generated by SearchTDTicketJob. Similar to SearchTDTicketJob, it first checks if it is to be searching the sandbox or production instance of your TeamDynamix application, and then checks if the current Slack user has made a request before or not. After the appropriate checks, it generates and returns an attachment to Slack.
+ShowTDTicketJob (`app/SlashCommandHandlers/Jobs/ShowTDTicketJob.php`) is responsible for displaying any given ticket. It is invoked by the ShowTDTicket method and accepts a TeamDynamix ticket number. Either entering a ticket number, or pressing the "Show Ticket" buttons generated by SearchTDTicketJob. Similar to SearchTDTicketJob, it first gets the session data from SessionManager. After the appropriate checks, it generates and returns an attachment to Slack.
 
 **Table Migrations**
 

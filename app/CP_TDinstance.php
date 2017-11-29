@@ -19,40 +19,40 @@ class CP_TDauth
 
     public function __construct()
     {
-        $a = func_get_args();
-        $i = func_num_args();
-        if (method_exists($this, $f = '__construct'.$i)) {
-            call_user_func_array([$this, $f], $a);
+        $args = func_get_args();
+        $argcount = func_num_args();
+        if (method_exists($this, $func = '__construct'.$argcount)) {
+            call_user_func_array([$this, $func], $args);
         }
     }
 
-    private function __construct0()
+    public function __construct0()
     {
         Log::info('CP_TDauth: Constructing empty self.');
     }
 
-    private function __construct5($b, $w, $u, $i, $e)
+    public function __construct5($beid, $wskey, $urlroot, $appid, $env)
     {
         Log::info('CP_TDauth: Constructing self with new authorization.');
-        $this->setEnv($e, $u);
-        $this->authorize($b, $w, $this->urlroot);
-        $this->BEID = $b;
-        $this->WebServicesKey = $w;
-        $this->appid = $i;
+        $this->setEnv($env, $urlroot);
+        $this->authorize($beid, $wskey, $this->urlroot);
+        $this->BEID = $beid;
+        $this->WebServicesKey = $wskey;
+        $this->appid = $appid;
     }
 
-    private function __construct6($b, $w, $u, $i, $e, $a)
+    public function __construct6($beid, $wskey, $urlroot, $appid, $env, $auth)
     {
         Log::info('CP_TDauth: Constructing self with existing authorization.');
-        $this->setEnv($e, $u);
-        $this->BEID = $b;
-        $this->WebServicesKey = $w;
-        $this->appid = $i;
+        $this->setEnv($env, $urlroot);
+        $this->BEID = $beid;
+        $this->WebServicesKey = $wskey;
+        $this->appid = $appid;
 
-        $parts = explode('.', $a);
+        $parts = explode('.', $auth);
         if (count($parts) == 3) {
             list($JWTheader, $JWTpayload, $JWTsig) = $parts;
-            $this->auth = $a;
+            $this->auth = $auth;
             $this->expires = json_decode(base64_decode($JWTpayload))->exp;
             $this->authstring = 'Authorization: Bearer '.$this->auth;
             $this->header = $JWTheader;
@@ -63,25 +63,25 @@ class CP_TDauth
         Log::info('CP_TDauth: Invalid token.');
     }
 
-    private function setEnv($e, $u)
+    private function setEnv($env, $urlroot)
     {
-        if ($e == 'prod') {
+        if ($env == 'prod') {
             Log::info('CP_TDauth: Setup for production.');
-            $this->urlroot = $u.'TDWebApi/api/';
-            $this->appsroot = $u.'TDNext/Apps/';
-        } elseif ($e == 'sandbox') {
+            $this->urlroot = $urlroot.'TDWebApi/api/';
+            $this->appsroot = $urlroot.'TDNext/Apps/';
+        } elseif ($env == 'sandbox') {
             Log::info('CP_TDauth: Setup for sandbox.');
-            $this->urlroot = $u.'SBTDWebApi/api/';
-            $this->appsroot = $u.'SBTDNext/Apps/';
+            $this->urlroot = $urlroot.'SBTDWebApi/api/';
+            $this->appsroot = $urlroot.'SBTDNext/Apps/';
         }
     }
 
-    private function authorize($b, $w, $u)
+    private function authorize($beid, $wskey, $urlroot)
     {
         Log::info('CP_TDauth: authorize method called.');
-        Log::info('CP_TDauth: authorize requesting at ['.$u.'auth/loginadmin].');
-        $ch = curl_init($u.'auth/loginadmin');
-        $payload = json_encode(['BEID' => $b, 'WebServicesKey' => $w]);
+        Log::info('CP_TDauth: authorize requesting at ['.$urlroot.'auth/loginadmin].');
+        $ch = curl_init($urlroot.'auth/loginadmin');
+        $payload = json_encode(['BEID' => $beid, 'WebServicesKey' => $wskey]);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -89,13 +89,16 @@ class CP_TDauth
         curl_close($ch);
         if (!$bearer) {
             Log::info('CP_TDauth: Authorization failed.');
-        } else {
-            Log::info('CP_TDauth: Authorization successful.');
-            list($JWTheader, $JWTpayload, $JWTsig) = explode('.', $bearer);
-            $this->auth = $bearer;
-            $this->expires = json_decode(base64_decode($JWTpayload))->exp;
-            $this->authstring = 'Authorization: Bearer '.$this->auth;
+
+            return;
         }
+        Log::info('CP_TDauth: Authorization successful.');
+        list($JWTheader, $JWTpayload, $JWTsig) = explode('.', $bearer);
+        $this->auth = $bearer;
+        $this->expires = json_decode(base64_decode($JWTpayload))->exp;
+        $this->authstring = 'Authorization: Bearer '.$this->auth;
+        $this->header = $JWTheader;
+        $this->authsig = $JWTsig;
     }
 
     public function checkToken()
@@ -131,7 +134,7 @@ class CP_TDauth
     {
         Log::info('CP_TDauth: getVersion method called.');
 
-        return '0.98b';
+        return '0.1.9';
     }
 }
 
@@ -156,10 +159,10 @@ class CP_TDinstance extends CP_TDauth
         return json_decode($result, true);
     }
 
-    private function flagCheck($r)
+    private function flagCheck($search)
     {
         Log::info('CP_TDinstance: flagCheck method called.');
-        $check = substr($r, -3);
+        $check = substr($search, -3);
         if (substr($check, 1, 1) == '-') {
             $flag = substr($check, 1, 2);
             Log::info('CP_TDinstance: flagCheck given flag '.$flag);
@@ -196,14 +199,12 @@ class CP_TDinstance extends CP_TDauth
                 return;
             }
         } else {
-            if ($flag = '-r') {
+            if ($flag == '-r') {
                 $data = ['RequestorNameSearch' => substr($search, 0, -3)];
                 $data_string = json_encode($data);
                 $tickets = $this->connect('post', $this->appid.'/tickets/search', $data_string);
 
                 return $tickets;
-            } else {
-                return;
             }
         }
     }

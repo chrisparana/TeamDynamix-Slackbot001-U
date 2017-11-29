@@ -13,17 +13,20 @@ class SlackButtonController extends Controller
         Log::info('CP_SlackButtonController: processBtn method called.');
         Log::info('CP_SlackButtonController: Request type is '.gettype($request).'.');
         $data = json_decode($request['payload']);
-        if ($data) {
-            Log::info('CP_SlackButtonController: Controller was given data.');
-        } else {
+        if (!$data) {
             Log::info('CP_SlackButtonController: Controller was called, but no data given.');
+
+            return;
         }
+
+        Log::info('CP_SlackButtonController: Controller was given data.');
         if ($data->token == env('SLACK_SLASH_COMMAND_VERIFICATION_TOKEN')) {
             Log::info('CP_SlackButtonController: Token verified. Proceeding.');
             $this->buttonResponse($data);
-        } else {
-            Log::info('CP_SlackButtonController: Token did not pass verification.');
+
+            return;
         }
+        Log::info('CP_SlackButtonController: Token did not pass verification.');
     }
 
     private function buttonResponse($data)
@@ -34,7 +37,7 @@ class SlackButtonController extends Controller
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
+        curl_exec($ch);
         curl_close($ch);
 
         $userSession = new SessionManager();

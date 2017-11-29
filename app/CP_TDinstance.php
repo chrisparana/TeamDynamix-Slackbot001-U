@@ -49,13 +49,8 @@ class CP_TDauth
         $this->WebServicesKey = $wskey;
         $this->appid = $appid;
 
-<<<<<<< HEAD
         $parts = explode('.', $auth);
         if(count($parts) == 3) {
-=======
-        $parts = explode('.', $a);
-        if (count($parts) == 3) {
->>>>>>> e693102ad88ad9336e40ad505fb7aa39f5c980e5
             list($JWTheader, $JWTpayload, $JWTsig) = $parts;
             $this->auth = $auth;
             $this->expires = json_decode(base64_decode($JWTpayload))->exp;

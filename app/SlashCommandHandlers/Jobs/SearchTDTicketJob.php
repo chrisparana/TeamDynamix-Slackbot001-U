@@ -41,7 +41,7 @@ class SearchTDTicketJob extends SlashCommandResponseJob
             if ($ticket['StatusName'] != 'Closed' && $ticket['StatusName'] != 'Cancelled') {
                 $opencount++;
                 $date = date('F jS, Y', strtotime($ticket['CreatedDate']));
-                $ticketURL = (string) $TDinstance->rootAppsUrl().'Tickets/TicketDet?TicketID='.$ticket['ID'];
+                //$ticketURL = (string) $TDinstance->rootAppsUrl().'Tickets/TicketDet?TicketID='.$ticket['ID'];
                 $ticketDescription = $TDinstance->ticket($ticket['ID']); //Need to do this because in the TD API, searched ticket's desctiption is empty.
 
                 $attachmentFields[] = AttachmentField::create('Opened On', $date);

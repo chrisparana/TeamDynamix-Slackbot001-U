@@ -14,14 +14,16 @@ class SlackButtonController extends Controller
         Log::info('CP_SlackButtonController: Request type is '.gettype($request).'.');
         $data = json_decode($request['payload']);
         if (!$data) {
-          Log::info('CP_SlackButtonController: Controller was called, but no data given.');
-          return;
+            Log::info('CP_SlackButtonController: Controller was called, but no data given.');
+
+            return;
         }
 
         Log::info('CP_SlackButtonController: Controller was given data.');
         if ($data->token == env('SLACK_SLASH_COMMAND_VERIFICATION_TOKEN')) {
             Log::info('CP_SlackButtonController: Token verified. Proceeding.');
             $this->buttonResponse($data);
+
             return;
         }
         Log::info('CP_SlackButtonController: Token did not pass verification.');

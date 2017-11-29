@@ -89,6 +89,7 @@ class CP_TDauth
         curl_close($ch);
         if (!$bearer) {
             Log::info('CP_TDauth: Authorization failed.');
+
             return;
         }
         Log::info('CP_TDauth: Authorization successful.');

@@ -1,8 +1,8 @@
 # TeamDynamix Slackbot001-U Installation and Setup
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
-[![Build Status](https://img.shields.io/travis/chrisparana/TeamDynamix-Slackbot001-U.svg?style=flat-square)](https://travis-ci.org/chrisparana/TeamDynamix-Slackbot001-U)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE.txt)
+[![Build Status](https://img.shields.io/travis/chrisparana/TeamDynamix-Slackbot001-U.svg?style=flat)](https://travis-ci.org/chrisparana/TeamDynamix-Slackbot001-U)
 [![StyleCI](https://styleci.io/repos/110712386/shield?branch=master)](https://styleci.io/repos/110712386)
-[![Codacy branch grade](https://img.shields.io/codacy/grade/d4ab6a4335e7435c9e116102108b9eca/master.svg?style=flat-square)](https://www.codacy.com/app/chrisparana/TeamDynamix-Slackbot001-U?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chrisparana/TeamDynamix-Slackbot001-U&amp;utm_campaign=Badge_Grade)
+[![Codacy branch grade](https://img.shields.io/codacy/grade/d4ab6a4335e7435c9e116102108b9eca/master.svg?style=flat)](https://www.codacy.com/app/chrisparana/TeamDynamix-Slackbot001-U?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chrisparana/TeamDynamix-Slackbot001-U&amp;utm_campaign=Badge_Grade)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chrisparana/TeamDynamix-Slackbot001-U/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chrisparana/TeamDynamix-Slackbot001-U/?branch=master)
 
 *Note! This is the basic universal version. Full point release will contain the web interface to build fully customized commands and responses.*

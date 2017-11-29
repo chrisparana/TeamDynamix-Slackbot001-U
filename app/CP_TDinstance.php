@@ -89,15 +89,15 @@ class CP_TDauth
         curl_close($ch);
         if (!$bearer) {
             Log::info('CP_TDauth: Authorization failed.');
-        } else {
-            Log::info('CP_TDauth: Authorization successful.');
-            list($JWTheader, $JWTpayload, $JWTsig) = explode('.', $bearer);
-            $this->auth = $bearer;
-            $this->expires = json_decode(base64_decode($JWTpayload))->exp;
-            $this->authstring = 'Authorization: Bearer '.$this->auth;
-            $this->header = $JWTheader;
-            $this->authsig = $JWTsig;
+            return;
         }
+        Log::info('CP_TDauth: Authorization successful.');
+        list($JWTheader, $JWTpayload, $JWTsig) = explode('.', $bearer);
+        $this->auth = $bearer;
+        $this->expires = json_decode(base64_decode($JWTpayload))->exp;
+        $this->authstring = 'Authorization: Bearer '.$this->auth;
+        $this->header = $JWTheader;
+        $this->authsig = $JWTsig;
     }
 
     public function checkToken()
@@ -133,7 +133,7 @@ class CP_TDauth
     {
         Log::info('CP_TDauth: getVersion method called.');
 
-        return '0.98b';
+        return '0.1.9';
     }
 }
 

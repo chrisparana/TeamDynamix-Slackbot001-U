@@ -3,6 +3,7 @@
 [![Build Status](https://img.shields.io/travis/chrisparana/TeamDynamix-Slackbot001-U.svg?style=flat-square)](https://travis-ci.org/chrisparana/TeamDynamix-Slackbot001-U)
 [![StyleCI](https://styleci.io/repos/110712386/shield?branch=master)](https://styleci.io/repos/110712386)
 [![Codacy branch grade](https://img.shields.io/codacy/grade/d4ab6a4335e7435c9e116102108b9eca/master.svg?style=flat-square)](https://www.codacy.com/app/chrisparana/TeamDynamix-Slackbot001-U?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chrisparana/TeamDynamix-Slackbot001-U&amp;utm_campaign=Badge_Grade)
+[![Scrutinizer](https://img.shields.io/scrutinizer/g/filp/whoops.svg?style=flat-square)](https://scrutinizer-ci.com/g/chrisparana/TeamDynamix-Slackbot001-U/?branch=master)
 
 *Note! This is the basic universal version. Full point release will contain the web interface to build fully customized commands and responses.*
 
